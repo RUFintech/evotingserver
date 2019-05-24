@@ -23,10 +23,10 @@ Organizations:
         Name: OrdererOrg
 
         # ID to load the MSP definition as
-        ID: OrdererMSP
+        ID: example.com
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/example.com/msp
+        MSPDir: ./crypto-config/ordererOrganizations/example.com/msp
 
         # turn off security for the channel
         AdminPrincipal: Role.MEMBER
@@ -37,9 +37,9 @@ Organizations:
         Name: Org1
 
         # ID to load the MSP definition as
-        ID: Org1MSP
+        ID: org1.example.com
 
-        MSPDir: crypto-config/peerOrganizations/org1.example.com/msp
+        MSPDir: ./crypto-config/peerOrganizations/org1.example.com/msp
 
         # turn off security for the peer
         AdminPrincipal: Role.MEMBER
@@ -86,7 +86,7 @@ Orderer: &OrdererDefaults
         # the serialized messages in a batch. A message larger than the preferred
         # max bytes will result in a batch larger than preferred max bytes.
         PreferredMaxBytes: 512 KB
-
+    
     Kafka:
         # Brokers: A list of Kafka brokers to which the orderer connects
         # NOTE: Use IP:port notation

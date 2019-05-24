@@ -28,7 +28,7 @@
 
 # prepending $PWD/../bin to PATH to ensure we are picking up the correct binaries
 # this may be commented out to resolve installed version of tools if desired
-export PATH=${PWD}/../../../bin:${PWD}:$PATH
+export PATH=${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}
 export VERBOSE=false
 
@@ -249,7 +249,7 @@ function networkDown() {
     # remove orderer block and other channel configuration transactions and certs
     rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config ./org3-artifacts/crypto-config/ channel-artifacts/org3.json
     # remove the docker-compose yaml file that was customized to the example
-    rm -f docker-compose-e2e.yaml
+    rm -f docker-compose-e2e.yml
   fi
 }
 
@@ -267,7 +267,7 @@ function replacePrivateKey() {
   fi
 
   # Copy the template to the file that will be modified to add the private key
-  cp docker-compose-e2e-template.yaml docker-compose-e2e.yaml
+  cp docker-compose-e2e-template.yml docker-compose-e2e.yml
 
   # The next steps will replace the template's contents with the
   # actual values of the private key file names for the two CAs.
@@ -275,14 +275,14 @@ function replacePrivateKey() {
   cd crypto-config/peerOrganizations/org1.example.com/ca/
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR"
-  sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
+  sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
   # cd crypto-config/peerOrganizations/org2.example.com/ca/
   # PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR"
-  sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
+  sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
   # If MacOSX, remove the temporary backup of the docker-compose file
   if [ "$ARCH" == "Darwin" ]; then
-    rm docker-compose-e2e.yamlt
+    rm docker-compose-e2e.yml
   fi
 }
 
@@ -319,7 +319,7 @@ function generateCerts() {
     rm -Rf crypto-config
   fi
   set -x
-  cryptogen generate --config=./crypto-config.yaml
+  cryptogen generate --config=./crypto-config.yml
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -380,7 +380,7 @@ function generateChannelArtifacts() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   set -x
-  configtxgen -profile ComposerOrdererGenesis -outputBlock ./channel-artifacts/genesis.block -channelID $CHANNEL_NAME
+  configtxgen -profile ComposerOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -440,11 +440,11 @@ CLI_DELAY=3
 # channel name defaults to "mychannel"
 CHANNEL_NAME="composerchannel"
 # use this as the default docker-compose yaml definition
-COMPOSE_FILE=docker-compose-kafka.yaml
+COMPOSE_FILE=docker-compose-kafka.yml
 #
-COMPOSE_FILE_COUCH=docker-compose-couch.yaml
+COMPOSE_FILE_COUCH=docker-compose-couch.yml
 # org3 docker compose file
-COMPOSE_FILE_ORG3=docker-compose-org3.yaml
+COMPOSE_FILE_ORG3=docker-compose-org3.yml
 #
 # use golang as the default language for chaincode
 LANGUAGE=golang
@@ -512,10 +512,10 @@ if [ "${IF_COUCHDB}" == "couchdb" ]; then
   echo
   echo "${EXPMODE} for channel '${CHANNEL_NAME}' with CLI timeout of '${CLI_TIMEOUT}' seconds and CLI delay of '${CLI_DELAY}' seconds and using database '${IF_COUCHDB}'"
 else
-  echo "${EXPMODE} for channel '${CHANNEL_NAME}' with CLI timeout of '${CLI_TIMEOUT}' seconds and CLI delay of '${CLI_DELAY}' seconds"
+  echo "${EXPMODE} for channel 'docker exec peer0.org1.example.com peer channel create -o orderer0.example.co${CHANNEL_NAME}' with CLI timeout of '${CLI_TIMEOUT}' seconds and CLI delay of '${CLI_DELAY}' seconds"
 fi
 # ask for confirmation to proceed
-# askProceed For Travis
+# askProceed For Travis 
 
 #Create the network using docker compose
 if [ "${MODE}" == "up" ]; then
